@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Search - Automotive Analytics</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">Automotive Analytics Platform</div>
+    <div class="nav-links">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/vehicles}">Vehicles</a>
+        <a th:href="@{/analytics/fuel}">Analytics</a>
+        <a th:href="@{/reports}">Reports</a>
+        <a th:href="@{/search}">Search</a>
+    </div>
+    <div class="nav-user">
+        <span>Welcome, <strong sec:authentication="name">User</strong></span>
+        &nbsp;|&nbsp;
+        <a th:href="@{/logout}" onclick="return confirm('Logout?')">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/dashboard}">&#9632; Dashboard</a></li>
+            <li><a th:href="@{/vehicles}">&#9632; Vehicles</a></li>
+            <li>
+                <span class="sidebar-section">Analytics</span>
+                <ul>
+                    <li><a th:href="@{/analytics/fuel}">- Fuel</a></li>
+                    <li><a th:href="@{/analytics/engine}">- Engine</a></li>
+                    <li><a th:href="@{/analytics/environmental}">- Environment</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{/reports}">&#9632; Reports</a></li>
+            <li class="active"><a th:href="@{/search}">&#9632; Search</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h2>Search Vehicles</h2>
+        </div>
+
+        <!-- Search Form -->
+        <div class="search-box">
+            <form method="get" th:action="@{/search}" class="data-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="keyword">Keyword Search</label>
+                        <input type="text" id="keyword" name="keyword"
+                               th:value="${keyword}"
+                               placeholder="Search by number, manufacturer, model...">
+                    </div>
+                    <div class="form-group">
+                        <label for="manufacturer">By Manufacturer</label>
+                        <input type="text" id="manufacturer" name="manufacturer"
+                               th:value="${manufacturer}"
+                               placeholder="e.g. Toyota">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fuelType">By Fuel Type</label>
+                        <select id="fuelType" name="fuelType">
+                            <option value="">-- All Fuel Types --</option>
+                            <option value="Petrol"   th:selected="${fuelType == 'Petrol'}">Petrol</option>
+                            <option value="Diesel"   th:selected="${fuelType == 'Diesel'}">Diesel</option>
+                            <option value="Electric" th:selected="${fuelType == 'Electric'}">Electric</option>
+                            <option value="Hybrid"   th:selected="${fuelType == 'Hybrid'}">Hybrid</option>
+                            <option value="CNG"      th:selected="${fuelType == 'CNG'}">CNG</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">By Year</label>
+                        <input type="number" id="year" name="year"
+                               th:value="${year}"
+                               min="1990" max="2026"
+                               placeholder="e.g. 2021">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a th:href="@{/search}" class="btn btn-secondary">Clear</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Search Results -->
+        <div th:if="${results != null}" class="section">
+            <h3>
+                Search Results
+                <small th:if="${searchType != ''}">for <em th:text="${searchType}"></em></small>
+                &nbsp;(<span th:text="${results.size()}">0</span> found)
+            </h3>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Vehicle No.</th>
+                            <th>Manufacturer</th>
+                            <th>Model</th>
+                            <th>Year</th>
+                            <th>Fuel Type</th>
+                            <th>Owner</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="v, stat : ${results}">
+                            <td th:text="${stat.count}">1</td>
+                            <td th:text="${v.vehicleNumber}">-</td>
+                            <td th:text="${v.manufacturer}">-</td>
+                            <td th:text="${v.model}">-</td>
+                            <td th:text="${v.year}">-</td>
+                            <td th:text="${v.fuelType}">-</td>
+                            <td th:text="${v.ownerName}">-</td>
+                            <td>
+                                <a th:href="@{/vehicles/view/{id}(id=${v.vehicleId})}"
+                                   class="btn btn-sm btn-secondary">View</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(results)}">
+                            <td colspan="8" style="text-align:center;">No vehicles found for your search criteria.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

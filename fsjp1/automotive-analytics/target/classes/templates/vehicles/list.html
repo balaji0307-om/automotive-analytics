@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehicles - Automotive Analytics</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-brand">Automotive Analytics Platform</div>
+    <div class="nav-links">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/vehicles}">Vehicles</a>
+        <a th:href="@{/analytics/fuel}">Analytics</a>
+        <a th:href="@{/reports}">Reports</a>
+        <a th:href="@{/search}">Search</a>
+    </div>
+    <div class="nav-user">
+        <span>Welcome, <strong sec:authentication="name">User</strong></span>
+        &nbsp;|&nbsp;
+        <a th:href="@{/logout}" onclick="return confirm('Logout?')">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/dashboard}">&#9632; Dashboard</a></li>
+            <li class="active"><a th:href="@{/vehicles}">&#9632; Vehicles</a></li>
+            <li>
+                <span class="sidebar-section">Analytics</span>
+                <ul>
+                    <li><a th:href="@{/analytics/fuel}">- Fuel</a></li>
+                    <li><a th:href="@{/analytics/engine}">- Engine</a></li>
+                    <li><a th:href="@{/analytics/environmental}">- Environment</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{/reports}">&#9632; Reports</a></li>
+            <li><a th:href="@{/search}">&#9632; Search</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h2>Vehicle Management</h2>
+            <!-- Add Vehicle button – ADMIN only -->
+            <a sec:authorize="hasRole('ADMIN')"
+               th:href="@{/vehicles/new}"
+               class="btn btn-success">+ Add New Vehicle</a>
+        </div>
+
+        <!-- Flash messages -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+        <!-- Client-side search filter -->
+        <div class="table-controls">
+            <input type="text"
+                   id="tableSearch"
+                   placeholder="Filter vehicles..."
+                   oninput="filterTable('vehicleTable', this.value)"
+                   class="search-input">
+        </div>
+
+        <!-- Vehicles table -->
+        <div class="table-container">
+            <table id="vehicleTable" class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Vehicle No.</th>
+                        <th>Manufacturer</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Fuel Type</th>
+                        <th>Fuel (L/100km)</th>
+                        <th>Temp (°C)</th>
+                        <th>CO&#8322; (g/km)</th>
+                        <th>Owner</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="v, stat : ${vehicles}">
+                        <td th:text="${stat.count}">1</td>
+                        <td th:text="${v.vehicleNumber}">-</td>
+                        <td th:text="${v.manufacturer}">-</td>
+                        <td th:text="${v.model}">-</td>
+                        <td th:text="${v.year}">-</td>
+                        <td th:text="${v.fuelType}">-</td>
+                        <td th:text="${#numbers.formatDecimal(v.fuelConsumption, 1, 2)}">-</td>
+                        <td th:text="${#numbers.formatDecimal(v.engineTemperature, 1, 1)}">-</td>
+                        <td th:text="${#numbers.formatDecimal(v.co2Emission, 1, 2)}">-</td>
+                        <td th:text="${v.ownerName}">-</td>
+                        <td class="actions">
+                            <a th:href="@{/vehicles/view/{id}(id=${v.vehicleId})}"
+                               class="btn btn-sm btn-secondary">View</a>
+                            <!-- Edit/Delete – ADMIN only -->
+                            <a sec:authorize="hasRole('ADMIN')"
+                               th:href="@{/vehicles/edit/{id}(id=${v.vehicleId})}"
+                               class="btn btn-sm btn-primary">Edit</a>
+                            <a sec:authorize="hasRole('ADMIN')"
+                               th:href="@{/vehicles/delete/{id}(id=${v.vehicleId})}"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirmDelete('this vehicle')">Delete</a>
+                        </td>
+                    </tr>
+                    <!-- Empty state -->
+                    <tr th:if="${#lists.isEmpty(vehicles)}">
+                        <td colspan="11" style="text-align:center;">No vehicles found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="table-footer">
+            Total: <strong th:text="${vehicles.size()}">0</strong> vehicle(s)
+        </p>
+    </main>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

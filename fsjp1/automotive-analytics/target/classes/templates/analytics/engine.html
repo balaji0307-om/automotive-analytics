@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Engine Analytics - Automotive Analytics</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">Automotive Analytics Platform</div>
+    <div class="nav-links">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/vehicles}">Vehicles</a>
+        <a th:href="@{/analytics/fuel}">Analytics</a>
+        <a th:href="@{/reports}">Reports</a>
+        <a th:href="@{/search}">Search</a>
+    </div>
+    <div class="nav-user">
+        <span>Welcome, <strong sec:authentication="name">User</strong></span>
+        &nbsp;|&nbsp;
+        <a th:href="@{/logout}" onclick="return confirm('Logout?')">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/dashboard}">&#9632; Dashboard</a></li>
+            <li><a th:href="@{/vehicles}">&#9632; Vehicles</a></li>
+            <li>
+                <span class="sidebar-section">Analytics</span>
+                <ul>
+                    <li><a th:href="@{/analytics/fuel}">- Fuel</a></li>
+                    <li class="active"><a th:href="@{/analytics/engine}">- Engine</a></li>
+                    <li><a th:href="@{/analytics/environmental}">- Environment</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{/reports}">&#9632; Reports</a></li>
+            <li><a th:href="@{/search}">&#9632; Search</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h2>Engine Behaviour Analysis</h2>
+            <p>Overheating threshold: &gt; 100 &deg;C</p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-title">Average Engine Temperature</div>
+                <div class="card-value"
+                     th:text="${#numbers.formatDecimal(analytics.avgEngineTemperature, 1, 1) + ' °C'}">-</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Overheating Vehicles</div>
+                <div class="card-value" th:text="${analytics.overheatingVehicleCount}">0</div>
+                <div class="card-label">Temperature above 100°C</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Normal Vehicles</div>
+                <div class="card-value" th:text="${analytics.normalVehicleCount}">0</div>
+                <div class="card-label">Temperature within range</div>
+            </div>
+        </div>
+
+        <!-- Overheating Vehicles Table -->
+        <div class="section">
+            <h3>Overheating Vehicles (Temperature &gt; 100&deg;C)</h3>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Vehicle No.</th>
+                            <th>Manufacturer</th>
+                            <th>Model</th>
+                            <th>Engine Type</th>
+                            <th>Temperature (°C)</th>
+                            <th>Owner</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="v, stat : ${overheatingVehicles}">
+                            <td th:text="${stat.count}">1</td>
+                            <td th:text="${v.vehicleNumber}">-</td>
+                            <td th:text="${v.manufacturer}">-</td>
+                            <td th:text="${v.model}">-</td>
+                            <td th:text="${v.engineType}">-</td>
+                            <td>
+                                <strong th:text="${#numbers.formatDecimal(v.engineTemperature, 1, 1) + ' °C'}"
+                                        style="color: red;">-</strong>
+                            </td>
+                            <td th:text="${v.ownerName}">-</td>
+                            <td>
+                                <a th:href="@{/vehicles/view/{id}(id=${v.vehicleId})}"
+                                   class="btn btn-sm btn-secondary">View</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(overheatingVehicles)}">
+                            <td colspan="8" style="text-align:center; color:green;">
+                                No overheating vehicles. All engines are in normal range!
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="analytics-nav">
+            <a th:href="@{/analytics/fuel}" class="btn btn-secondary">&larr; Fuel Analysis</a>
+            <a th:href="@{/analytics/environmental}" class="btn btn-secondary">Environmental Analysis &rarr;</a>
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

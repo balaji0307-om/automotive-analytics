@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Built-By: Lenovo
+Build-Jdk: 21.0.11
+Implementation-Title: Modern Java RPC stack using Jetty+Jersey+Jackson+M
+ essagePack (from https://github.com/making/msgpack-rpc-jersey-blank)
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: 1
+Implementation-Vendor: Pivotal Software, Inc.
+Main-Class: 10.App
+Created-By: Maven Integration for Eclipse
+

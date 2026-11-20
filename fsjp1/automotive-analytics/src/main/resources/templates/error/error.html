@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Automotive Analytics</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="error-body">
+<div class="error-container">
+    <h1 style="color: #e65100;" th:text="${status != null ? status : 'Error'}">Error</h1>
+    <h2>Something went wrong</h2>
+    <p th:text="${message != null ? message : 'An error occurred. Please go back and try again.'}">Error message</p>
+    <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+</div>
+</body>
+</html>

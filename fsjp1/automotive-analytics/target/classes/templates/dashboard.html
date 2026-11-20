@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Automotive Analytics</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<nav class="navbar">
+    <div class="nav-brand">Automotive Analytics Platform</div>
+    <div class="nav-links">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/vehicles}">Vehicles</a>
+        <a th:href="@{/analytics/fuel}">Analytics</a>
+        <a th:href="@{/reports}">Reports</a>
+        <a th:href="@{/search}">Search</a>
+    </div>
+    <div class="nav-user">
+        <!-- Show logged-in username -->
+        <span>Welcome, <strong sec:authentication="name">User</strong></span>
+        &nbsp;|&nbsp;
+        <a th:href="@{/logout}" onclick="return confirm('Are you sure you want to logout?')">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li th:classappend="${activePage == 'dashboard'} ? 'active'">
+                <a th:href="@{/dashboard}">&#9632; Dashboard</a>
+            </li>
+            <li th:classappend="${activePage == 'vehicles'} ? 'active'">
+                <a th:href="@{/vehicles}">&#9632; Vehicles</a>
+            </li>
+            <li>
+                <span class="sidebar-section">Analytics</span>
+                <ul>
+                    <li><a th:href="@{/analytics/fuel}">- Fuel</a></li>
+                    <li><a th:href="@{/analytics/engine}">- Engine</a></li>
+                    <li><a th:href="@{/analytics/environmental}">- Environment</a></li>
+                </ul>
+            </li>
+            <li th:classappend="${activePage == 'reports'} ? 'active'">
+                <a th:href="@{/reports}">&#9632; Reports</a>
+            </li>
+            <li th:classappend="${activePage == 'search'} ? 'active'">
+                <a th:href="@{/search}">&#9632; Search</a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h2>Dashboard</h2>
+            <p>Overview of all vehicle analytics data</p>
+        </div>
+
+        <!-- Flash messages -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+        <!-- Summary Cards -->
+        <div class="cards-grid">
+
+            <div class="card">
+                <div class="card-title">Total Vehicles</div>
+                <div class="card-value" th:text="${stats.totalVehicles}">0</div>
+                <div class="card-label">Registered vehicles</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Avg Fuel Consumption</div>
+                <div class="card-value"
+                     th:text="${#numbers.formatDecimal(stats.avgFuelConsumption, 1, 2)} + ' L/100km'">
+                    0.00 L/100km
+                </div>
+                <div class="card-label">Average across all vehicles</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Avg Engine Temperature</div>
+                <div class="card-value"
+                     th:text="${#numbers.formatDecimal(stats.avgEngineTemperature, 1, 1)} + ' °C'">
+                    0.0 °C
+                </div>
+                <div class="card-label">Average across all vehicles</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Total Reports</div>
+                <div class="card-value" th:text="${stats.totalReports}">0</div>
+                <div class="card-label">Generated reports</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Total CO&#8322; Emissions</div>
+                <div class="card-value"
+                     th:text="${#numbers.formatDecimal(stats.totalCo2Emissions, 1, 2)} + ' g/km'">
+                    0.00 g/km
+                </div>
+                <div class="card-label">Sum of all vehicle emissions</div>
+            </div>
+
+        </div>
+
+        <!-- Quick Links -->
+        <div class="section">
+            <h3>Quick Actions</h3>
+            <div class="quick-actions">
+                <a th:href="@{/vehicles}" class="btn btn-primary">View All Vehicles</a>
+                <a th:href="@{/analytics/fuel}" class="btn btn-secondary">Fuel Analytics</a>
+                <a th:href="@{/analytics/engine}" class="btn btn-secondary">Engine Analytics</a>
+                <a th:href="@{/reports/generate}" class="btn btn-secondary">Generate Report</a>
+                <a th:href="@{/search}" class="btn btn-secondary">Search Vehicles</a>
+                <!-- ADMIN only action -->
+                <a sec:authorize="hasRole('ADMIN')"
+                   th:href="@{/vehicles/new}"
+                   class="btn btn-success">+ Add Vehicle</a>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

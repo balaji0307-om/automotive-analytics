@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Environmental Analytics - Automotive Analytics</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">Automotive Analytics Platform</div>
+    <div class="nav-links">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/vehicles}">Vehicles</a>
+        <a th:href="@{/analytics/fuel}">Analytics</a>
+        <a th:href="@{/reports}">Reports</a>
+        <a th:href="@{/search}">Search</a>
+    </div>
+    <div class="nav-user">
+        <span>Welcome, <strong sec:authentication="name">User</strong></span>
+        &nbsp;|&nbsp;
+        <a th:href="@{/logout}" onclick="return confirm('Logout?')">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/dashboard}">&#9632; Dashboard</a></li>
+            <li><a th:href="@{/vehicles}">&#9632; Vehicles</a></li>
+            <li>
+                <span class="sidebar-section">Analytics</span>
+                <ul>
+                    <li><a th:href="@{/analytics/fuel}">- Fuel</a></li>
+                    <li><a th:href="@{/analytics/engine}">- Engine</a></li>
+                    <li class="active"><a th:href="@{/analytics/environmental}">- Environment</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{/reports}">&#9632; Reports</a></li>
+            <li><a th:href="@{/search}">&#9632; Search</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h2>Environmental Impact Analysis</h2>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-title">Average CO&#8322; Emission</div>
+                <div class="card-value"
+                     th:text="${#numbers.formatDecimal(analytics.avgCo2Emission, 1, 2) + ' g/km'}">-</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Highest CO&#8322; Emitter</div>
+                <div class="card-value"
+                     th:text="${analytics.highestCo2Value != null ? #numbers.formatDecimal(analytics.highestCo2Value, 1, 2) + ' g/km' : 'N/A'}">-</div>
+                <div class="card-label" th:text="${analytics.highestCo2Vehicle}">-</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Lowest CO&#8322; Emitter</div>
+                <div class="card-value"
+                     th:text="${analytics.lowestCo2Value != null ? #numbers.formatDecimal(analytics.lowestCo2Value, 1, 2) + ' g/km' : 'N/A'}">-</div>
+                <div class="card-label" th:text="${analytics.lowestCo2Vehicle}">-</div>
+            </div>
+        </div>
+
+        <!-- CO2 Table for all vehicles -->
+        <div class="section">
+            <h3>All Vehicles - CO&#8322; Emissions</h3>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Vehicle No.</th>
+                            <th>Manufacturer</th>
+                            <th>Model</th>
+                            <th>Fuel Type</th>
+                            <th>CO&#8322; (g/km)</th>
+                            <th>Environmental Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="v, stat : ${vehicles}">
+                            <td th:text="${stat.count}">1</td>
+                            <td th:text="${v.vehicleNumber}">-</td>
+                            <td th:text="${v.manufacturer}">-</td>
+                            <td th:text="${v.model}">-</td>
+                            <td th:text="${v.fuelType}">-</td>
+                            <td th:text="${#numbers.formatDecimal(v.co2Emission, 1, 2)}">-</td>
+                            <td>
+                                <span th:if="${v.co2Emission == 0}"     class="badge badge-green">Zero Emission</span>
+                                <span th:if="${v.co2Emission > 0 and v.co2Emission < 100}"  class="badge badge-blue">Low</span>
+                                <span th:if="${v.co2Emission >= 100 and v.co2Emission < 150}" class="badge badge-yellow">Moderate</span>
+                                <span th:if="${v.co2Emission >= 150 and v.co2Emission < 200}" class="badge badge-orange">High</span>
+                                <span th:if="${v.co2Emission >= 200}"  class="badge badge-red">Very High</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="analytics-nav">
+            <a th:href="@{/analytics/engine}" class="btn btn-secondary">&larr; Engine Analysis</a>
+            <a th:href="@{/analytics/fuel}" class="btn btn-secondary">&larr; Fuel Analysis</a>
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

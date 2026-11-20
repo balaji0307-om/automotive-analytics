@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>404 - Not Found</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="error-body">
+<div class="error-container">
+    <h1 style="color: #1565C0;">404</h1>
+    <h2>Page Not Found</h2>
+    <p th:text="${message != null ? message : 'The page you are looking for does not exist.'}">Not found</p>
+    <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+    &nbsp;
+    <a href="/vehicles" class="btn btn-secondary">Go to Vehicles</a>
+</div>
+</body>
+</html>

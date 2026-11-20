@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${formTitle} + ' - Automotive Analytics'">Vehicle Form</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-brand">Automotive Analytics Platform</div>
+    <div class="nav-links">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/vehicles}">Vehicles</a>
+        <a th:href="@{/analytics/fuel}">Analytics</a>
+        <a th:href="@{/reports}">Reports</a>
+        <a th:href="@{/search}">Search</a>
+    </div>
+    <div class="nav-user">
+        <span>Welcome, <strong sec:authentication="name">User</strong></span>
+        &nbsp;|&nbsp;
+        <a th:href="@{/logout}" onclick="return confirm('Logout?')">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/dashboard}">&#9632; Dashboard</a></li>
+            <li class="active"><a th:href="@{/vehicles}">&#9632; Vehicles</a></li>
+            <li>
+                <span class="sidebar-section">Analytics</span>
+                <ul>
+                    <li><a th:href="@{/analytics/fuel}">- Fuel</a></li>
+                    <li><a th:href="@{/analytics/engine}">- Engine</a></li>
+                    <li><a th:href="@{/analytics/environmental}">- Environment</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{/reports}">&#9632; Reports</a></li>
+            <li><a th:href="@{/search}">&#9632; Search</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h2 th:text="${formTitle}">Vehicle Form</h2>
+            <a th:href="@{/vehicles}" class="btn btn-secondary">&#8592; Back to List</a>
+        </div>
+
+        <!-- Error banner -->
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+        <!--
+            Form posts to /vehicles/save.
+            th:object binds the DTO.
+            th:field automatically sets id, name, value attributes.
+        -->
+        <form th:action="@{/vehicles/save}"
+              th:object="${vehicleDto}"
+              method="post"
+              id="vehicleForm"
+              onsubmit="return validateVehicleForm()"
+              class="data-form">
+
+            <!-- Hidden field: carry vehicleId for update -->
+            <input type="hidden" th:field="*{vehicleId}">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="vehicleNumber">Vehicle Number *</label>
+                    <input type="text" th:field="*{vehicleNumber}" id="vehicleNumber"
+                           placeholder="e.g. MH12AB1234" maxlength="20">
+                    <span class="field-error" th:if="${#fields.hasErrors('vehicleNumber')}"
+                          th:errors="*{vehicleNumber}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="ownerName">Owner Name *</label>
+                    <input type="text" th:field="*{ownerName}" id="ownerName"
+                           placeholder="Full name of owner" maxlength="100">
+                    <span class="field-error" th:if="${#fields.hasErrors('ownerName')}"
+                          th:errors="*{ownerName}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="manufacturer">Manufacturer *</label>
+                    <input type="text" th:field="*{manufacturer}" id="manufacturer"
+                           placeholder="e.g. Toyota" maxlength="50">
+                    <span class="field-error" th:if="${#fields.hasErrors('manufacturer')}"
+                          th:errors="*{manufacturer}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="model">Model *</label>
+                    <input type="text" th:field="*{model}" id="model"
+                           placeholder="e.g. Camry" maxlength="50">
+                    <span class="field-error" th:if="${#fields.hasErrors('model')}"
+                          th:errors="*{model}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="year">Year *</label>
+                    <input type="number" th:field="*{year}" id="year"
+                           min="1990" max="2026" placeholder="e.g. 2021">
+                    <span class="field-error" th:if="${#fields.hasErrors('year')}"
+                          th:errors="*{year}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fuelType">Fuel Type *</label>
+                    <select th:field="*{fuelType}" id="fuelType">
+                        <option value="">-- Select --</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                        <option value="Hybrid">Hybrid</option>
+                        <option value="CNG">CNG</option>
+                    </select>
+                    <span class="field-error" th:if="${#fields.hasErrors('fuelType')}"
+                          th:errors="*{fuelType}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="engineType">Engine Type *</label>
+                    <input type="text" th:field="*{engineType}" id="engineType"
+                           placeholder="e.g. Inline-4, V6, Electric Motor" maxlength="50">
+                    <span class="field-error" th:if="${#fields.hasErrors('engineType')}"
+                          th:errors="*{engineType}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="mileage">Mileage (km) *</label>
+                    <input type="number" th:field="*{mileage}" id="mileage"
+                           step="0.1" min="0" placeholder="e.g. 45000">
+                    <span class="field-error" th:if="${#fields.hasErrors('mileage')}"
+                          th:errors="*{mileage}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fuelConsumption">Fuel Consumption (L/100km) *</label>
+                    <input type="number" th:field="*{fuelConsumption}" id="fuelConsumption"
+                           step="0.1" min="0.1" placeholder="e.g. 7.5">
+                    <span class="field-error" th:if="${#fields.hasErrors('fuelConsumption')}"
+                          th:errors="*{fuelConsumption}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="engineTemperature">Engine Temperature (°C) *</label>
+                    <input type="number" th:field="*{engineTemperature}" id="engineTemperature"
+                           step="0.1" min="0" placeholder="e.g. 90.0">
+                    <span class="field-error" th:if="${#fields.hasErrors('engineTemperature')}"
+                          th:errors="*{engineTemperature}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="co2Emission">CO&#8322; Emission (g/km) *</label>
+                    <input type="number" th:field="*{co2Emission}" id="co2Emission"
+                           step="0.1" min="0" placeholder="e.g. 120.0">
+                    <span class="field-error" th:if="${#fields.hasErrors('co2Emission')}"
+                          th:errors="*{co2Emission}"></span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <span th:text="${isEdit} ? 'Update Vehicle' : 'Add Vehicle'">Save</span>
+                </button>
+                <a th:href="@{/vehicles}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </main>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/validation.js}"></script>
+</body>
+</html>

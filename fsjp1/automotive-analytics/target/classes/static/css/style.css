@@ -1,0 +1,632 @@
+/* ============================================================
+   Automotive Analytics Platform - Main Stylesheet
+   Font: Arial (system default - no Google Fonts for simplicity)
+   Color scheme: White bg, Blue header, Gray sidebar
+   ============================================================ */
+
+/* ---- Reset & Base ---- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+a {
+    color: #1565C0;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+    background-color: #1565C0;
+    color: white;
+    padding: 0 20px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-brand {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.nav-links a {
+    color: white;
+    margin: 0 12px;
+    font-size: 13px;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+.nav-user {
+    color: white;
+    font-size: 13px;
+}
+
+.nav-user a {
+    color: #FFD54F;
+}
+
+/* ============================================================
+   PAGE LAYOUT (Sidebar + Main)
+   ============================================================ */
+.page-wrapper {
+    display: flex;
+    min-height: calc(100vh - 50px);
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+    width: 180px;
+    background-color: #ECEFF1;
+    border-right: 1px solid #CFD8DC;
+    padding: 16px 0;
+    flex-shrink: 0;
+}
+
+.sidebar-menu {
+    list-style: none;
+}
+
+.sidebar-menu li {
+    border-bottom: 1px solid #CFD8DC;
+}
+
+.sidebar-menu li a {
+    display: block;
+    padding: 10px 16px;
+    color: #333;
+    font-size: 13px;
+}
+
+.sidebar-menu li a:hover {
+    background-color: #B0BEC5;
+    text-decoration: none;
+}
+
+.sidebar-menu li.active a {
+    background-color: #1565C0;
+    color: white;
+    font-weight: bold;
+}
+
+.sidebar-section {
+    display: block;
+    padding: 8px 16px 4px;
+    color: #546E7A;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.sidebar-menu ul {
+    list-style: none;
+}
+
+.sidebar-menu ul li a {
+    padding: 6px 16px 6px 24px;
+    font-size: 12px;
+}
+
+/* ---- Main Content ---- */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1565C0;
+}
+
+.page-header h2 {
+    color: #1565C0;
+    font-size: 20px;
+}
+
+/* ============================================================
+   CARDS (Dashboard)
+   ============================================================ */
+.cards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #CFD8DC;
+    border-left: 4px solid #1565C0;
+    padding: 16px 20px;
+    min-width: 180px;
+    flex: 1;
+}
+
+.card-title {
+    font-size: 12px;
+    color: #546E7A;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.card-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1565C0;
+    margin-bottom: 4px;
+}
+
+.card-label {
+    font-size: 11px;
+    color: #78909C;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+    display: inline-block;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    opacity: 0.85;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: #1565C0;
+    color: white;
+    border-color: #1565C0;
+}
+
+.btn-secondary {
+    background-color: #78909C;
+    color: white;
+    border-color: #78909C;
+}
+
+.btn-success {
+    background-color: #2E7D32;
+    color: white;
+    border-color: #2E7D32;
+}
+
+.btn-danger {
+    background-color: #c62828;
+    color: white;
+    border-color: #c62828;
+}
+
+.btn-sm {
+    padding: 3px 8px;
+    font-size: 12px;
+}
+
+.btn-full {
+    width: 100%;
+    text-align: center;
+}
+
+/* ============================================================
+   ALERTS / FLASH MESSAGES
+   ============================================================ */
+.alert {
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.alert-success {
+    background-color: #E8F5E9;
+    border-color: #A5D6A7;
+    color: #1B5E20;
+}
+
+.alert-error {
+    background-color: #FFEBEE;
+    border-color: #EF9A9A;
+    color: #B71C1C;
+}
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+.table-container {
+    overflow-x: auto;
+    margin-bottom: 12px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.data-table th {
+    background-color: #1565C0;
+    color: white;
+    padding: 9px 12px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ECEFF1;
+    vertical-align: middle;
+}
+
+.data-table tbody tr:hover {
+    background-color: #E3F2FD;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #F5F5F5;
+}
+
+.data-table tbody tr:nth-child(even):hover {
+    background-color: #E3F2FD;
+}
+
+.actions {
+    white-space: nowrap;
+}
+
+.actions .btn + .btn {
+    margin-left: 4px;
+}
+
+.table-footer {
+    font-size: 12px;
+    color: #546E7A;
+    margin-top: 8px;
+}
+
+.table-controls {
+    margin-bottom: 12px;
+}
+
+/* ============================================================
+   FORMS
+   ============================================================ */
+.data-form {
+    max-width: 800px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 0;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="password"],
+.form-group select,
+.search-input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #B0BEC5;
+    border-radius: 3px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    background-color: #fff;
+    color: #333;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.search-input:focus {
+    outline: none;
+    border-color: #1565C0;
+}
+
+.field-error {
+    display: block;
+    color: #c62828;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+.login-body {
+    background-color: #ECEFF1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-container {
+    width: 360px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-header h1 {
+    color: #1565C0;
+    font-size: 22px;
+}
+
+.login-header p {
+    color: #546E7A;
+    font-size: 12px;
+}
+
+.login-form-box {
+    background-color: white;
+    padding: 28px;
+    border: 1px solid #CFD8DC;
+    border-top: 4px solid #1565C0;
+}
+
+.login-form-box h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.login-hint {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #ECEFF1;
+    color: #546E7A;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* ============================================================
+   DETAIL VIEW
+   ============================================================ */
+.detail-card {
+    background-color: white;
+    border: 1px solid #CFD8DC;
+    border-top: 4px solid #1565C0;
+    padding: 20px 24px;
+    max-width: 800px;
+}
+
+.detail-card h3 {
+    color: #1565C0;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.vehicle-number {
+    font-size: 13px;
+    color: #546E7A;
+    margin-bottom: 16px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.detail-row {
+    padding: 8px 0;
+    border-bottom: 1px solid #ECEFF1;
+}
+
+.detail-label {
+    font-size: 11px;
+    color: #78909C;
+    text-transform: uppercase;
+    display: block;
+}
+
+.detail-value {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* ============================================================
+   BADGES / STATUS LABELS
+   ============================================================ */
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.badge-green  { background-color: #E8F5E9; color: #1B5E20; border: 1px solid #A5D6A7; }
+.badge-blue   { background-color: #E3F2FD; color: #0D47A1; border: 1px solid #90CAF9; }
+.badge-yellow { background-color: #FFFDE7; color: #F57F17; border: 1px solid #FFF176; }
+.badge-orange { background-color: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; }
+.badge-red    { background-color: #FFEBEE; color: #B71C1C; border: 1px solid #EF9A9A; }
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.section {
+    margin-top: 24px;
+}
+
+.section h3 {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ECEFF1;
+}
+
+.section h4 {
+    font-size: 13px;
+    margin-bottom: 10px;
+    color: #546E7A;
+}
+
+/* ============================================================
+   QUICK ACTIONS
+   ============================================================ */
+.quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* ============================================================
+   ANALYTICS NAV
+   ============================================================ */
+.analytics-nav {
+    margin-top: 24px;
+    display: flex;
+    gap: 10px;
+}
+
+/* ============================================================
+   SEARCH BOX
+   ============================================================ */
+.search-box {
+    background-color: #F5F5F5;
+    border: 1px solid #CFD8DC;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+/* ============================================================
+   FILTER FORM (Reports page)
+   ============================================================ */
+.filter-form {
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+.filter-form label {
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.filter-form select {
+    padding: 5px 10px;
+    border: 1px solid #B0BEC5;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+/* ============================================================
+   REPORT CONTENT
+   ============================================================ */
+.report-content {
+    background-color: #F5F5F5;
+    border: 1px solid #CFD8DC;
+    padding: 14px;
+    font-family: monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.report-meta {
+    margin-bottom: 14px;
+    color: #546E7A;
+    font-size: 13px;
+}
+
+/* ============================================================
+   ERROR PAGES
+   ============================================================ */
+.error-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #F5F5F5;
+}
+
+.error-container {
+    text-align: center;
+    padding: 40px;
+    background-color: white;
+    border: 1px solid #CFD8DC;
+    max-width: 400px;
+    width: 100%;
+}
+
+.error-container h1 {
+    font-size: 64px;
+    margin-bottom: 8px;
+}
+
+.error-container h2 {
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.error-container p {
+    color: #546E7A;
+    margin-bottom: 20px;
+    font-size: 13px;
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports - Automotive Analytics</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">Automotive Analytics Platform</div>
+    <div class="nav-links">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/vehicles}">Vehicles</a>
+        <a th:href="@{/analytics/fuel}">Analytics</a>
+        <a th:href="@{/reports}">Reports</a>
+        <a th:href="@{/search}">Search</a>
+    </div>
+    <div class="nav-user">
+        <span>Welcome, <strong sec:authentication="name">User</strong></span>
+        &nbsp;|&nbsp;
+        <a th:href="@{/logout}" onclick="return confirm('Logout?')">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/dashboard}">&#9632; Dashboard</a></li>
+            <li><a th:href="@{/vehicles}">&#9632; Vehicles</a></li>
+            <li>
+                <span class="sidebar-section">Analytics</span>
+                <ul>
+                    <li><a th:href="@{/analytics/fuel}">- Fuel</a></li>
+                    <li><a th:href="@{/analytics/engine}">- Engine</a></li>
+                    <li><a th:href="@{/analytics/environmental}">- Environment</a></li>
+                </ul>
+            </li>
+            <li class="active"><a th:href="@{/reports}">&#9632; Reports</a></li>
+            <li><a th:href="@{/search}">&#9632; Search</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h2>Reports</h2>
+            <a th:href="@{/reports/generate}" class="btn btn-success">Generate New Report</a>
+        </div>
+
+        <!-- Flash messages -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+        <!-- Filter by type -->
+        <form method="get" th:action="@{/reports}" class="filter-form">
+            <label>Filter by type:</label>
+            <select name="type" id="reportTypeFilter" onchange="this.form.submit()">
+                <option value="">All Types</option>
+                <option value="FUEL"          th:selected="${selectedType == 'FUEL'}">Fuel</option>
+                <option value="ENGINE"        th:selected="${selectedType == 'ENGINE'}">Engine</option>
+                <option value="ENVIRONMENTAL" th:selected="${selectedType == 'ENVIRONMENTAL'}">Environmental</option>
+            </select>
+        </form>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Report ID</th>
+                        <th>Type</th>
+                        <th>Vehicle</th>
+                        <th>Summary</th>
+                        <th>Generated At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r, stat : ${reports}">
+                        <td th:text="${stat.count}">1</td>
+                        <td th:text="${r.reportId}">-</td>
+                        <td>
+                            <span th:text="${r.reportType}"
+                                  th:class="${'badge badge-' + (r.reportType == 'FUEL' ? 'blue' : r.reportType == 'ENGINE' ? 'yellow' : 'green')}">
+                            </span>
+                        </td>
+                        <td th:text="${r.vehicleNumber + ' - ' + r.manufacturer + ' ' + r.model}">-</td>
+                        <td th:text="${r.summary}">-</td>
+                        <td th:text="${#temporals.format(r.generatedAt, 'dd-MM-yyyy HH:mm')}">-</td>
+                        <td class="actions">
+                            <a th:href="@{/reports/view/{id}(id=${r.reportId})}"
+                               class="btn btn-sm btn-secondary">View</a>
+                            <a sec:authorize="hasRole('ADMIN')"
+                               th:href="@{/reports/delete/{id}(id=${r.reportId})}"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirmDelete('this report')">Delete</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(reports)}">
+                        <td colspan="7" style="text-align:center;">
+                            No reports found. <a th:href="@{/reports/generate}">Generate one now.</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="table-footer">Total: <strong th:text="${reports.size()}">0</strong> report(s)</p>
+    </main>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
